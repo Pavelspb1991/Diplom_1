@@ -11,24 +11,26 @@ class TestBurger:
         burger.set_buns(mock_bun)
         assert burger.bun == mock_bun
 
-    @pytest.mark.parametrize("data", [DataForTest.sauce, DataForTest.filling])
-    def test_add_ingredient_success(self, data, mock_sauce, mock_filling):
+    def test_add_sauce_success(self, mock_sauce):
         burger = Burger()
-        if data['ingredient'] == 'mock_sauce':
-            burger.add_ingredient(mock_sauce)
-        elif data['ingredient'] == 'mock_filling':
-            burger.add_ingredient(mock_filling)
-        else:
-            raise ValueError("Неверный тип ингредиента")
+        burger.add_ingredient(mock_sauce)
         assert len(burger.ingredients) == 1
-        assert burger.ingredients[0].get_name() == data['expected_name']
-        assert burger.ingredients[0].get_price() == data['expected_price']
-        assert burger.ingredients[0].get_type() == data['expected_type']
+        assert burger.ingredients[0].get_name() == 'Соус Spicy'
+        assert burger.ingredients[0].get_price() == 90
+        assert burger.ingredients[0].get_type() == 'SAUCE'
+
+    def test_add_filling_success(self, mock_filling):
+        burger = Burger()
+        burger.add_ingredient(mock_filling)
+        assert len(burger.ingredients) == 1
+        assert burger.ingredients[0].get_name() == 'Говяжий метеорит (отбивная)'
+        assert burger.ingredients[0].get_price() == 3000
+        assert burger.ingredients[0].get_type() == 'FILLING'
 
     def test_remove_ingredient_success(self, mock_sauce, mock_filling):
         burger = Burger()
         burger.add_ingredient(mock_filling)
-        assert len(burger.ingredients) == 1
+        burger.add_ingredient(mock_sauce)
         burger.remove_ingredient(0)
         ingredient_names = [ingredient.get_name() for ingredient in burger.ingredients]
         assert mock_filling.get_name() not in ingredient_names
